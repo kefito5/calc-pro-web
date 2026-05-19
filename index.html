@@ -1,38 +1,125 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="calfav.png" type="image/x-icon" />
-    <title>Calculadora</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <div class="calculator">
-      <input type="text" id="display" disabled placeholder="0" />
-      <div class="buttons">
-        <button onclick="clearDisplay()">C</button>
-        <button onclick="appendValue('7')">7</button>
-        <button onclick="appendValue('8')">8</button>
-        <button onclick="appendValue('9')">9</button>
-        <button onclick="appendValue('/')">/</button>
 
-        <button onclick="appendValue('4')">4</button>
-        <button onclick="appendValue('5')">5</button>
-        <button onclick="appendValue('6')">6</button>
-        <button onclick="appendValue('*')">*</button>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="shortcut icon" href="calfav.png" type="image/x-icon">
+</head>
 
-        <button onclick="appendValue('1')">1</button>
-        <button onclick="appendValue('2')">2</button>
-        <button onclick="appendValue('3')">3</button>
-        <button onclick="appendValue('-')">-</button>
+<body>
 
-        <button onclick="appendValue('0')">0</button>
-        <button onclick="appendValue('.')">.</button>
-        <button onclick="calculateResult()">=</button>
-        <button onclick="appendValue('+')">+</button>
+  <!-- Fondo con orbs animados -->
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+  <div class="bg-orb orb-3"></div>
+
+  <div class="phone-shell">
+    <div class="notch"></div>
+
+    <div class="calculator" id="calculator">
+
+      <!-- Header con memoria y historial -->
+      <div class="top-bar" id="top-bar">
+        <div class="memory-pill" id="memory-pill">
+          <span class="mem-label">M</span>
+          <span id="mem-val">0</span>
+        </div>
+        <button class="history-btn" id="history-toggle" aria-expanded="false" aria-label="Historial">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 3h7v7H3z M14 3h7v7h-7z M14 14h7v7h-7z M3 14h7v7H3z" />
+          </svg>
+          Historial
+        </button>
       </div>
+
+      <!-- Panel de historial -->
+      <div class="history-panel" id="history-panel" aria-live="polite">
+        <div class="history-header">
+          <span>Recientes</span>
+          <button class="clear-hist-btn" id="clear-hist">Limpiar</button>
+        </div>
+        <div id="history-list"></div>
+      </div>
+
+      <!-- Display -->
+      <div class="display-wrapper">
+        <div class="expression-preview" id="expr-preview"></div>
+        <input type="text" id="display" placeholder="0" readonly autocomplete="off"
+          aria-label="Pantalla de la calculadora" />
+        <div class="display-cursor"></div>
+      </div>
+
+      <!-- Botones de memoria -->
+      <div class="memory-row">
+        <button class="mem-btn" onclick="memoryClear()" title="Memory Clear">MC</button>
+        <button class="mem-btn" onclick="memoryRecall()" title="Memory Recall">MR</button>
+        <button class="mem-btn" onclick="memoryAdd()" title="Memory Add">M+</button>
+        <button class="mem-btn" onclick="memorySub()" title="Memory Sub">M−</button>
+      </div>
+
+      <!-- Grid de botones -->
+      <div class="buttons" id="buttons-grid">
+
+        <!-- Fila 1 -->
+        <button class="btn btn-fn" data-val="clearDisplay" onclick="clearDisplay()">AC</button>
+        <button class="btn btn-fn" data-val="toggleSign" onclick="toggleSign()">+/−</button>
+        <button class="btn btn-fn" data-val="percent" onclick="percent()">%</button>
+        <button class="btn btn-op" data-val="/" onclick="appendValue('/')">÷</button>
+
+        <!-- Fila 2 -->
+        <button class="btn btn-num" onclick="appendValue('7')">7</button>
+        <button class="btn btn-num" onclick="appendValue('8')">8</button>
+        <button class="btn btn-num" onclick="appendValue('9')">9</button>
+        <button class="btn btn-op" data-val="*" onclick="appendValue('*')">×</button>
+
+        <!-- Fila 3 -->
+        <button class="btn btn-num" onclick="appendValue('4')">4</button>
+        <button class="btn btn-num" onclick="appendValue('5')">5</button>
+        <button class="btn btn-num" onclick="appendValue('6')">6</button>
+        <button class="btn btn-op" data-val="-" onclick="appendValue('-')">−</button>
+
+        <!-- Fila 4 -->
+        <button class="btn btn-num" onclick="appendValue('1')">1</button>
+        <button class="btn btn-num" onclick="appendValue('2')">2</button>
+        <button class="btn btn-num" onclick="appendValue('3')">3</button>
+        <button class="btn btn-op" data-val="+" onclick="appendValue('+')">+</button>
+
+        <!-- Fila 5 -->
+        <button class="btn btn-num btn-zero" onclick="appendValue('0')">0</button>
+        <button class="btn btn-num" onclick="appendValue('.')">.</button>
+        <button class="btn btn-eq" onclick="calculateResult()">
+          <span>=</span>
+        </button>
+
+      </div>
+
+      <!-- Botón backspace flotante -->
+      <button class="backspace-btn" onclick="backspace()" aria-label="Borrar último dígito">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z" />
+          <line x1="18" y1="9" x2="12" y2="15" />
+          <line x1="12" y1="9" x2="18" y2="15" />
+        </svg>
+      </button>
+
     </div>
-    <script src="cal.js" defer></script>
-  </body>
+
+    <div class="home-bar"></div>
+  </div>
+
+  <!-- Toast de notificaciones -->
+  <div class="toast" id="toast"></div>
+
+  <script src="cal.js" defer></script>
+</body>
+
 </html>

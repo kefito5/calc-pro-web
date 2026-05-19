@@ -1,194 +1,834 @@
-/* style.css — Diseño "ultra pro" para la calculadora
-   - Fondo gris moderno
-   - Acentos en #91d902
-   - Diseño responsivo, accesible y pulido
-*/
-:root{
-  --bg-1: #1f2933;    /* fondo principal: gris azulado oscuro */
-  --bg-2: #23282f;    /* carta / panel */
-  --surface: #2b3138; /* botones neutros */
-  --muted: #9aa3ad;   /* texto secundario */
-  --accent: #91d902;  /* color solicitado */
-  --accent-600: #7cc200; /* sombra/hover */
-  --glass: rgba(255,255,255,0.03);
-  --radius: 14px;
-  --shadow-lg: 0 10px 30px rgba(2,6,23,0.6);
-  --transition: 180ms cubic-bezier(.2,.9,.3,1);
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+/* ============================================================
+   style.css — Calculadora Ultra Pro · Estilo iPhone 15 Pro
+   Paleta: Negro profundo + acento #91d902 lime
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap');
+
+/* ─── Variables ─────────────────────────────────────── */
+:root {
+  --bg: #0a0a0a;
+  --surface-1: #1c1c1e;
+  --surface-2: #2c2c2e;
+  --surface-3: #3a3a3c;
+
+  --num-bg: #333335;
+  --fn-bg: #a1a1a3;
+  --fn-color: #1c1c1e;
+  --op-bg: #91d902;
+  --op-color: #0e1a00;
+  --eq-bg: #91d902;
+  --eq-color: #0e1a00;
+
+  --text: #f5f5f7;
+  --text-2: #8e8e93;
+  --text-3: #636366;
+  --accent: #91d902;
+  --accent-dim: rgba(145, 217, 2, 0.15);
+  --accent-glow: rgba(145, 217, 2, 0.35);
+
+  --radius-btn: 50%;
+  --radius-ui: 16px;
+  --radius-pill: 100px;
+
+  --font: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+
+  --shadow-btn: 0 4px 16px rgba(0, 0, 0, 0.5);
+  --shadow-eq: 0 8px 32px rgba(145, 217, 2, 0.3);
+  --shadow-shell: 0 40px 120px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 255, 255, 0.06);
+
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 }
 
-*{box-sizing:border-box}
-html,body{height:100%}
-body{
-  margin:0;
-  min-height:100%;
-  min-height:100%;
-  background: radial-gradient(1200px 600px at 10% 10%, rgba(255,255,255,0.02), transparent),
-              linear-gradient(180deg, var(--bg-1), #111214 80%);
-  color: #e6eef5;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:16px;
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-  padding:32px;
+/* ─── Reset ─────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-/* contenedor de la calculadora */
-.calculator{
-  width:360px;
-  max-width:calc(100% - 48px);
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-  border-radius: var(--radius);
-  padding:20px;
-  box-shadow: var(--shadow-lg), 0 1px 0 rgba(255,255,255,0.02) inset;
-  border: 1px solid rgba(255,255,255,0.03);
-  backdrop-filter: blur(6px) saturate(120%);
+html,
+body {
+  height: 100%;
+  background: var(--bg);
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
 }
 
-/* display */
-#display{
-  width:100%;
-  height:72px;
-  border-radius: 12px;
+/* ─── Fondo con orbs ────────────────────────────────── */
+body {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bg-orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.12;
+  pointer-events: none;
+  animation: orbFloat 18s ease-in-out infinite alternate;
+}
+
+.orb-1 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, #91d902, transparent 70%);
+  top: -200px;
+  left: -150px;
+  animation-duration: 20s;
+}
+
+.orb-2 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, #3a6b00, transparent 70%);
+  bottom: -150px;
+  right: -100px;
+  animation-duration: 15s;
+  animation-delay: -5s;
+}
+
+.orb-3 {
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, #c8ff00, transparent 70%);
+  top: 50%;
+  right: 20%;
+  opacity: 0.06;
+  animation-duration: 25s;
+  animation-delay: -10s;
+}
+
+@keyframes orbFloat {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  33% {
+    transform: translate(30px, -40px) scale(1.05);
+  }
+
+  66% {
+    transform: translate(-20px, 20px) scale(0.97);
+  }
+
+  100% {
+    transform: translate(15px, -15px) scale(1.02);
+  }
+}
+
+/* ─── Shell del teléfono ────────────────────────────── */
+.phone-shell {
+  position: relative;
+  width: 390px;
+  min-height: 720px;
+  background: linear-gradient(170deg, #1e1e1e 0%, #0f0f0f 100%);
+  border-radius: 54px;
+  box-shadow: var(--shadow-shell);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 58px 20px 28px;
+  overflow: hidden;
+  animation: shellIn 0.7s var(--ease-spring) both;
+}
+
+@keyframes shellIn {
+  from {
+    opacity: 0;
+    transform: translateY(60px) scale(0.94);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Brillo lateral del shell */
+.phone-shell::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: inherit;
+  background: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.06) 0%,
+      transparent 40%,
+      transparent 60%,
+      rgba(255, 255, 255, 0.02) 100%);
+  pointer-events: none;
+}
+
+/* ─── Notch ─────────────────────────────────────────── */
+.notch {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 126px;
+  height: 34px;
+  background: #0a0a0a;
+  border-radius: 0 0 22px 22px;
+  z-index: 10;
+}
+
+.notch::before {
+  content: '';
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #1c1c1e;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.05);
+}
+
+/* Home bar */
+.home-bar {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 130px;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 10px;
+}
+
+/* ─── Calculadora interior ──────────────────────────── */
+.calculator {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ─── Top bar (memoria + historial) ─────────────────── */
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4px 10px;
+  animation: fadeSlideDown 0.5s var(--ease-out) 0.3s both;
+}
+
+.memory-pill {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--surface-2);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-pill);
+  padding: 4px 12px 4px 8px;
+  font-size: 12px;
+  color: var(--text-2);
+  transition: all 0.3s var(--ease-out);
+}
+
+.memory-pill.active {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.mem-label {
+  font-weight: 600;
+  font-size: 10px;
+  background: var(--surface-3);
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-2);
+}
+
+.memory-pill.active .mem-label {
+  background: var(--accent);
+  color: var(--op-color);
+}
+
+.history-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface-2);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-pill);
+  padding: 6px 14px;
+  color: var(--text-2);
+  font-size: 12px;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: all 0.25s var(--ease-out);
+}
+
+.history-btn:hover {
+  background: var(--surface-3);
+  color: var(--text);
+}
+
+.history-btn[aria-expanded="true"] {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ─── Panel de historial ─────────────────────────────── */
+.history-panel {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.45s var(--ease-in-out), opacity 0.35s var(--ease-out), margin 0.35s;
+  background: var(--surface-1);
+  border-radius: var(--radius-ui);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  margin-bottom: 0;
+}
+
+.history-panel.open {
+  max-height: 200px;
+  opacity: 1;
+  margin-bottom: 14px;
+}
+
+.history-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-3);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.clear-hist-btn {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-size: 11px;
+  cursor: pointer;
+  font-family: var(--font);
+  transition: opacity 0.2s;
+}
+
+.clear-hist-btn:hover {
+  opacity: 0.7;
+}
+
+#history-list {
+  max-height: 140px;
+  overflow-y: auto;
+  padding: 0 10px 10px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--surface-3) transparent;
+}
+
+#history-list::-webkit-scrollbar {
+  width: 3px;
+}
+
+#history-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#history-list::-webkit-scrollbar-thumb {
+  background: var(--surface-3);
+  border-radius: 10px;
+}
+
+.hist-item {
+  padding: 7px 8px;
+  font-size: 13px;
+  color: var(--text-2);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  animation: histItemIn 0.3s var(--ease-out) both;
+}
+
+.hist-item:hover {
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.hist-item .result-part {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.hist-empty {
+  padding: 12px 8px;
+  font-size: 13px;
+  color: var(--text-3);
+  text-align: center;
+}
+
+@keyframes histItemIn {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ─── Display ────────────────────────────────────────── */
+.display-wrapper {
+  position: relative;
+  padding: 0 8px;
+  margin-bottom: 6px;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  animation: fadeSlideDown 0.5s var(--ease-out) 0.15s both;
+}
+
+.expression-preview {
+  font-size: 14px;
+  color: var(--text-3);
+  text-align: right;
+  min-height: 20px;
+  padding-right: 4px;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  transition: opacity 0.3s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#display {
+  width: 100%;
   border: none;
   outline: none;
-  padding:18px 20px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.12));
-  color: #f8fff0;
-  font-size:28px;
-  text-align:right;
-  box-shadow: 0 6px 18px rgba(2,6,23,0.45);
-  margin-bottom:18px;
+  background: transparent;
+  color: var(--text);
+  font-size: 64px;
+  font-weight: 300;
+  text-align: right;
+  font-family: var(--font);
+  letter-spacing: -0.03em;
+  line-height: 1;
+  padding: 6px 4px 8px;
+  cursor: default;
+  caret-color: var(--accent);
+  transition: font-size 0.2s var(--ease-out);
 }
-#display::placeholder{ color: rgba(248,255,240,0.35); }
 
-/* botones */
-.buttons{
-  display:grid;
+#display.shrink {
+  font-size: 40px;
+}
+
+#display.xs-shrink {
+  font-size: 30px;
+}
+
+/* ─── Fila de memoria ───────────────────────────────── */
+.memory-row {
+  display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap:12px;
+  gap: 8px;
+  padding: 0 2px;
+  margin-bottom: 16px;
+  animation: fadeSlideUp 0.5s var(--ease-out) 0.25s both;
 }
-.buttons button{
-  appearance:none;
-  -webkit-appearance:none;
+
+.mem-btn {
+  background: var(--surface-2);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  color: var(--text-2);
+  font-size: 12px;
+  font-weight: 500;
+  font-family: var(--font);
+  padding: 8px 0;
+  cursor: pointer;
+  transition: all 0.2s var(--ease-out);
+}
+
+.mem-btn:hover {
+  background: var(--surface-3);
+  color: var(--text);
+  transform: translateY(-1px);
+}
+
+.mem-btn:active {
+  transform: scale(0.94);
+}
+
+/* ─── Grid principal de botones ─────────────────────── */
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 13px;
+  padding: 0 2px;
+  animation: fadeSlideUp 0.6s var(--ease-out) 0.35s both;
+}
+
+/* ─── Botón base ────────────────────────────────────── */
+.btn {
+  position: relative;
+  appearance: none;
   border: none;
-  padding:16px 12px;
-  border-radius:12px;
-  font-size:18px;
-  font-weight:600;
-  color:#e6eef5;
-  cursor:pointer;
-  transition: transform var(--transition), box-shadow var(--transition), background-color var(--transition);
-  background: linear-gradient(180deg, var(--surface), rgba(0,0,0,0.08));
-  box-shadow: 0 6px 18px rgba(2,6,23,0.45);
+  border-radius: var(--radius-btn);
+  font-family: var(--font);
+  font-size: 26px;
+  font-weight: 400;
+  cursor: pointer;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition:
+    transform 0.14s var(--ease-spring),
+    box-shadow 0.18s var(--ease-out),
+    background-color 0.2s;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
 }
 
-/* estilos especiales por tipo */
-.buttons button:nth-child(1){ /* C */
-  background: linear-gradient(180deg, #6b6f74 0%, #52565a 100%);
-  color:#f6f7f8;
+/* Ripple interno */
+.btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: rgba(255, 255, 255, 0.08);
+  opacity: 0;
+  transition: opacity 0.2s;
 }
 
-
-
-/* operadores (última columna) */
-.buttons button:nth-child(4n){
-  background: linear-gradient(180deg, rgba(145,217,2,0.12), rgba(145,217,2,0.08));
-  color: #eaf7d9;
-  border: 1px solid rgba(145,217,2,0.18);
+.btn:active::before {
+  opacity: 1;
 }
 
-/* boton = con acento fuerte */
-.buttons button[onclick*="calculateResult"]{
-  background: linear-gradient(180deg, var(--accent), var(--accent-600));
-  color:#06210a;
-  box-shadow: 0 10px 30px rgba(145,217,2,0.22), 0 2px 0 rgba(0,0,0,0.2) inset;
-  font-size:20px;
+/* Brillo sutil en la parte superior */
+.btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 50%;
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), transparent);
+  pointer-events: none;
 }
 
-/* cero ocupa una celda pero queda bonito continuo */
-.buttons button[onclick*="appendValue('0')"]{
-  grid-column: 1 / span 2;
+/* Hover / Press */
+.btn:hover {
+  transform: scale(1.05);
 }
 
-.buttons button:hover{
-  transform: translateY(-4px) scale(1.01);
-  box-shadow: 0 18px 40px rgba(2,6,23,0.6);
-}
-.buttons button:active{
-  transform: translateY(0px) scale(.995);
-  box-shadow: 0 6px 14px rgba(2,6,23,0.45);
-}
-.buttons button:focus{
-  outline: 3px solid rgba(145,217,2,0.18);
-  outline-offset: 2px;
+.btn:active {
+  transform: scale(0.93) !important;
 }
 
-/* estados secundarios */
-.buttons button[onclick*="clearDisplay"]{
-  background: linear-gradient(180deg, #d45a63, #b43e4a);
+/* Tipo: numérico */
+.btn-num {
+  background: var(--num-bg);
+  color: var(--text);
+  box-shadow: var(--shadow-btn);
 }
 
-/* responsivo */
-@media (max-width:420px){
-  :root{ font-size:15px }
-  .calculator{ width:320px; padding:16px }
-  #display{ height:64px; font-size:24px }
-  .buttons button{ padding:14px 10px; font-size:16px }
+.btn-num:hover {
+  background: #3d3d3f;
 }
 
-/* pequeña nota visual en la parte inferior */
-.calculator:after{
-  content:'';
-  display:block;
-  height:6px;
-  margin-top:12px;
-  border-radius:6px;
-  background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(145,217,2,0.14), rgba(255,255,255,0.02));
+/* Tipo: funciones (AC, +/−, %) */
+.btn-fn {
+  background: var(--fn-bg);
+  color: var(--fn-color);
+  font-weight: 500;
+  box-shadow: var(--shadow-btn);
 }
 
-/* extras: history & memory */
-
-.extras-row{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:8px;
-  margin-bottom:10px;
+.btn-fn:hover {
+  background: #bbbbbe;
 }
-#memory-indicator, #memory-indicator span, #mem-val{ font-weight:600 }
-#history{ display:none; max-height:160px; overflow:auto; margin-top:8px; padding:8px; border-radius:8px; background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.08)); border:1px solid rgba(255,255,255,0.02) }
-.hist-item{ padding:6px 8px; border-radius:6px; color:var(--muted); font-size:13px }
-.hist-empty{ color:var(--muted); font-size:13px }
 
-/* button press animation */
-.btn-press{ transform: translateY(1px) scale(.995) !important; box-shadow: 0 4px 10px rgba(2,6,23,0.4) !important; }
-.btn-pulse{ animation: pulse 420ms ease-out; }
-
-@keyframes pulse{ 0%{ transform: scale(1); } 50%{ transform: scale(1.06); } 100%{ transform: scale(1); } }
-
-/* display shake for errors */
-.shake{ animation: shake 560ms ease-in-out; }
-@keyframes shake{ 10%,90%{ transform: translateX(-1px) } 20%,80%{ transform: translateX(2px) } 30%,50%,70%{ transform: translateX(-4px) } 40%,60%{ transform: translateX(4px) } }
-
-
-/* modo claro opcional: añade class="light" en <body> para un tema alternativo */
-body.light{
-  background: linear-gradient(180deg,#f3f4f6,#e9eef3);
-  color:#0b1220;
+/* Tipo: operadores */
+.btn-op {
+  background: var(--op-bg);
+  color: var(--op-color);
+  font-size: 30px;
+  font-weight: 300;
+  box-shadow: 0 6px 24px rgba(145, 217, 2, 0.25);
 }
-body.light .calculator{
-  background: linear-gradient(180deg,#ffffff,#f6f9fb);
-  border: 1px solid rgba(2,6,23,0.04);
-  box-shadow: 0 8px 30px rgba(2,6,23,0.08);
-}
-body.light #display{ color:#091018; background: linear-gradient(180deg,#fbfcfd,#eef3f6) }
-body.light .buttons button{ color:#091018; background: linear-gradient(180deg,#f7f9fb,#edf1f4) }
-body.light .buttons button[onclick*="calculateResult"]{ color:#06210a }
 
-/* accesibilidad: tamaños mínimo para interacción táctil */
-@media (hover:none){
-  .buttons button{ padding:18px }
+.btn-op:hover {
+  background: #9de802;
+  box-shadow: 0 8px 32px rgba(145, 217, 2, 0.4);
+}
+
+.btn-op.active-op {
+  background: var(--text);
+  color: var(--op-bg);
+}
+
+/* Cero ancho doble */
+.btn-zero {
+  grid-column: span 2;
+  border-radius: 100px;
+  aspect-ratio: unset;
+  justify-content: flex-start;
+  padding-left: 30px;
+  font-size: 26px;
+}
+
+/* Igual — grande y brillante */
+.btn-eq {
+  background: var(--eq-bg);
+  color: var(--eq-color);
+  font-size: 30px;
+  font-weight: 400;
+  box-shadow: var(--shadow-eq);
+  transition: transform 0.14s var(--ease-spring),
+    box-shadow 0.18s var(--ease-out),
+    filter 0.2s;
+}
+
+.btn-eq:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 12px 40px rgba(145, 217, 2, 0.5);
+}
+
+.btn-eq:active {
+  transform: scale(0.91) !important;
+}
+
+/* ─── Botón backspace flotante ──────────────────────── */
+.backspace-btn {
+  position: absolute;
+  top: 120px;
+  right: 4px;
+  background: none;
+  border: none;
+  color: var(--text-3);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s, transform 0.15s var(--ease-spring);
+  animation: fadeIn 0.5s var(--ease-out) 0.4s both;
+}
+
+.backspace-btn:hover {
+  color: var(--text);
+  transform: scale(1.15);
+}
+
+.backspace-btn:active {
+  transform: scale(0.88);
+}
+
+/* ─── Toast ─────────────────────────────────────────── */
+.toast {
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--surface-2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text);
+  padding: 10px 20px;
+  border-radius: var(--radius-pill);
+  font-size: 13px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s, transform 0.3s var(--ease-spring);
+  white-space: nowrap;
+  backdrop-filter: blur(8px);
+  z-index: 100;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ─── Animaciones ────────────────────────────────────── */
+@keyframes fadeSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* Animación del = */
+@keyframes eqPulse {
+  0% {
+    transform: scale(1);
+    box-shadow: var(--shadow-eq);
+  }
+
+  40% {
+    transform: scale(1.08);
+    box-shadow: 0 16px 50px rgba(145, 217, 2, 0.65);
+  }
+
+  100% {
+    transform: scale(1);
+    box-shadow: var(--shadow-eq);
+  }
+}
+
+.btn-eq.pulse-eq {
+  animation: eqPulse 0.4s var(--ease-spring);
+}
+
+/* Display result pop */
+@keyframes resultPop {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.03);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+#display.result-pop {
+  animation: resultPop 0.35s var(--ease-spring);
+}
+
+/* Shake de error */
+@keyframes shake {
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  15%,
+  45%,
+  75% {
+    transform: translateX(-6px);
+  }
+
+  30%,
+  60%,
+  90% {
+    transform: translateX(6px);
+  }
+}
+
+#display.shake {
+  animation: shake 0.5s ease-in-out;
+}
+
+/* Ripple en botón presionado */
+@keyframes ripple {
+  from {
+    transform: scale(0);
+    opacity: 0.35;
+  }
+
+  to {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+.btn-ripple {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  pointer-events: none;
+  transform: scale(0);
+  animation: ripple 0.5s var(--ease-out) forwards;
+}
+
+/* ─── Accesibilidad ─────────────────────────────────── */
+.btn:focus-visible,
+.mem-btn:focus-visible,
+.history-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ─── Responsive ─────────────────────────────────────── */
+@media (max-height: 750px) {
+  .phone-shell {
+    min-height: auto;
+    padding-top: 44px;
+  }
+
+  #display {
+    font-size: 52px;
+  }
+
+  .buttons {
+    gap: 10px;
+  }
+}
+
+@media (max-width: 420px) {
+  .phone-shell {
+    width: calc(100vw - 24px);
+    border-radius: 40px;
+  }
+
+  .buttons {
+    gap: 10px;
+  }
+
+  #display {
+    font-size: 52px;
+  }
 }
